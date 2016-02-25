@@ -26,3 +26,6 @@
 *.exe
 *.out
 *.app
+/proj.win32/NewMyBird.sdf
+/cocosstudio
+/proj.ios_mac
