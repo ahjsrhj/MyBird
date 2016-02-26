@@ -93,4 +93,6 @@ private:
 
 	StatusLayer *statusLayer;
 
+	Size visibleSize;
+
 };

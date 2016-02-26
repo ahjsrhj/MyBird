@@ -36,11 +36,14 @@ cocos2d::Sprite *Number::getNumSprite(int num) {
 
 cocos2d::Node* Number::getNumNodeWithNumber(int num) {
 	auto node = Node::create();
+	int i = 0;
 	do{
 		int n = num % 10;
-
-
-
+		auto numSprite = this->smallNumbers.at(n);
+		numSprite->setPosition(-i * numSprite->getContentSize().width, 0);
+		node->addChild(numSprite);
+		i++;
+		num /= 10;
 	} while (num != 0);
 
 	return node;

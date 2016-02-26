@@ -9,7 +9,7 @@ bool GameLayer::init() {
 
 	this->score = 0;
 
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+	visibleSize = Director::getInstance()->getVisibleSize();
 
 	//´´½¨Ð¡Äñ
 	this->bird = BirdSprite::getInstance();
@@ -173,12 +173,25 @@ void GameLayer::checkPass() {
 void GameLayer::gameOver() {
 	this->unscheduleAllCallbacks();
 	this->removeChild(this->bird);
+	for (auto pipe : this->pipes) {
+		this->removeChild(pipe);
+	}
+	this->statusLayer->hideScore();
+	this->showScorePanel();
 }
 
 void GameLayer::showScorePanel() {
-	auto panel = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("socre_panel"));
+	auto panel = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("score_panel"));
 	panel->setPosition(Director::getInstance()->getVisibleSize() / 2);
 	this->addChild(panel);
+
+	auto scoreNode = Number::getInstance()->getNumNodeWithNumber(this->score);
+	scoreNode->setPosition(panel->getContentSize().width / 5 * 4, panel->getContentSize().height / 3 * 2);
+	panel->addChild(scoreNode);
+
+	auto gameOverSprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("text_game_over"));
+	gameOverSprite->setPosition(visibleSize.width / 2, visibleSize.height / 3 * 2);
+	this->addChild(gameOverSprite);
 }
 
 void GameLayer::bindStatusLayer(StatusLayer * statusLayer) {

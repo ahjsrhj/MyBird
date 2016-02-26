@@ -42,5 +42,5 @@ void StatusLayer::showScore(int score) {
 }
 
 void StatusLayer::hideScore() {
-	
+	this->removeAllChildren();
 }
