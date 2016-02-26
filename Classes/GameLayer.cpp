@@ -178,6 +178,7 @@ void GameLayer::checkPass() {
 }
 
 void GameLayer::gameOver() {
+	SimpleAudioEngine::getInstance()->playEffect("sfx_hit.ogg");
 	this->unscheduleAllCallbacks();
 	this->removeChild(this->bird);
 	for (auto pipe : this->pipes) {
@@ -190,6 +191,7 @@ void GameLayer::gameOver() {
 	this->statusLayer->hideScore();
 	this->showScorePanel();
 	this->gameStatus = GAME_OVER;
+	SimpleAudioEngine::getInstance()->playEffect("sfx_die.ogg");
 }
 
 void GameLayer::showScorePanel() {
