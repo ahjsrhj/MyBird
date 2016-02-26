@@ -22,6 +22,7 @@ void StatusLayer::showScore(int score) {
 	//fix bugs
 	int bit = 0;
 	if (score != 0) {
+		//获取共有多少个数字
 		bit = log10(score);
 	}
 
@@ -29,6 +30,7 @@ void StatusLayer::showScore(int score) {
 	do {
 		int n = score % 10;
 		auto num = Number::getInstance()->getNumSprite(n);
+		//设置数字的位置
 		num->setPosition(this->visibleSize.width / 2
 			+ width * (bit + 1) / 2 - width / 2 - i * width,
 			visibleSize.height - height / 2);

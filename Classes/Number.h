@@ -12,10 +12,13 @@ public:
 
 	Sprite *getNumSprite(int num);
 
+	Node* getNumNodeWithNumber(int num);
 
 private:
 	static Number *sharedNumber;
 
 	Vector<Sprite*> numbers;
+
+	Vector<Sprite*> smallNumbers;
 
 };

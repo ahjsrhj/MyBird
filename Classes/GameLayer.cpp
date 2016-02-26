@@ -21,9 +21,10 @@ bool GameLayer::init() {
 	//设置线性阻尼
 	body->setLinearDamping(0.0f);
 	//设置刚体是否受物理世界重力的影响
-	body->setGravityEnable(true);
+	body->setGravityEnable(false);
 	//设置形状的恢复系数
-	body->getShape(0)->setRestitution(0.0f);
+	//body->getShape(0)->setRestitution(0.0f);
+	body->getShape(0)->setDensity(1.0f);
 	//设置所属种类的掩码值
 	body->setCategoryBitmask(BIRD_MASK);
 	body->setCollisionBitmask(BIRD_MASK | OBST_MASK);
@@ -94,7 +95,7 @@ void GameLayer::scrollPipe(float delta) {
 bool GameLayer::onContactBegin(const PhysicsContact& contact) {
 
 	log("onContactBegin");
-//	this->gameOver();
+	this->gameOver();
 
 	return true;
 
@@ -107,25 +108,34 @@ void GameLayer::createPips() {
 			AtlasLoader::getInstance()->getSpriteFrameByName("pipe_up"));
 		auto pipeDown = Sprite::createWithSpriteFrame(
 			AtlasLoader::getInstance()->getSpriteFrameByName("pipe_down"));
+
+		pipeUp->setPosition(Vec2(0, -(PIPE_HEIGHT + PIPE_DISTANCE) / 2));
+		pipeDown->setPosition(Vec2(0, (PIPE_HEIGHT + PIPE_DISTANCE) / 2));
+
 		//创建物理属性
-		auto pipeUpBody = PhysicsBody::createBox(pipeUp->getContentSize());
+		auto pipeUpBody = PhysicsBody::createBox(pipeUp->getContentSize(), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2::ZERO);
 		//设置为静态刚体
 		pipeUpBody->setDynamic(false);
 		pipeUpBody->getShape(0)->setRestitution(0.0f);
+		//设置刚体密度
+		pipeUpBody->getShape(0)->setDensity(1.0f);
 		pipeUpBody->setCategoryBitmask(OBST_MASK);
 		pipeUpBody->setCollisionBitmask(BIRD_MASK | OBST_MASK);
 		pipeUpBody->setContactTestBitmask(BIRD_MASK | OBST_MASK);
 		pipeUp->setPhysicsBody(pipeUpBody);
 
-		auto pipeDownBody = PhysicsBody::createBox(pipeDown->getContentSize());
+		auto pipeDownBody = PhysicsBody::createBox(pipeDown->getContentSize(), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2::ZERO);
 		//设置为静态刚体
 		pipeDownBody->setDynamic(false);
 		pipeDownBody->getShape(0)->setRestitution(0.0f);
+		pipeDownBody->getShape(0)->setDensity(1.0f);
+		//设置碰撞掩码
+		pipeDownBody->setCategoryBitmask(OBST_MASK);
+		pipeDownBody->setCollisionBitmask(BIRD_MASK | OBST_MASK);
+		pipeDownBody->setContactTestBitmask(BIRD_MASK | OBST_MASK);
+
 		pipeDown->setPhysicsBody(pipeDownBody);
 
-
-		pipeUp->setPosition(Vec2(0, -(PIPE_HEIGHT + PIPE_DISTANCE) / 2));
-		pipeDown->setPosition(Vec2(0, (PIPE_HEIGHT + PIPE_DISTANCE) / 2));
 		auto singlePipe = Node::create();
 		singlePipe->addChild(pipeUp);
 		singlePipe->addChild(pipeDown);
@@ -163,6 +173,12 @@ void GameLayer::checkPass() {
 void GameLayer::gameOver() {
 	this->unscheduleAllCallbacks();
 	this->removeChild(this->bird);
+}
+
+void GameLayer::showScorePanel() {
+	auto panel = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("socre_panel"));
+	panel->setPosition(Director::getInstance()->getVisibleSize() / 2);
+	this->addChild(panel);
 }
 
 void GameLayer::bindStatusLayer(StatusLayer * statusLayer) {

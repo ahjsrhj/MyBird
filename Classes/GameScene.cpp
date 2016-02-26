@@ -7,7 +7,8 @@ bool GameScene::init() {
 		return false;
 	}
 
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//显示物理轮廓
+	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
 
 	//添加背景层

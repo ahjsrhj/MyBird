@@ -60,6 +60,7 @@ public:
 
 	void bindStatusLayer(StatusLayer * statusLayer);
 
+
 private:
 	//创建管子
 	void createPips();
@@ -71,6 +72,10 @@ private:
 	void checkPass();
 
 	void gameOver();
+
+	//显示分数盘
+	void showScorePanel();
+
 private:
 	BirdSprite *bird;
 
