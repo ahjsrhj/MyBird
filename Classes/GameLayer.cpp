@@ -8,6 +8,8 @@ bool GameLayer::init() {
 	}
 
 	this->score = 0;
+	this->gameStatus = GameStatus::GAME_RUNNING;
+	this->bestScore = UserDefault::getInstance()->getIntegerForKey(KEY);
 
 	visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -65,7 +67,12 @@ bool GameLayer::init() {
 }
 
 void GameLayer::onTouch() {
-	this->bird->getPhysicsBody()->setVelocity(Vec2(0, 280));
+	if (gameStatus == GameStatus::GAME_RUNNING) {
+		this->bird->getPhysicsBody()->setVelocity(Vec2(0, 280));
+	} else if (gameStatus == GameStatus::GAME_OVER) {
+		auto scene = GameScene::create();
+		Director::getInstance()->replaceScene(scene);
+	}
 }
 
 void GameLayer::update(float delta) {
@@ -176,8 +183,13 @@ void GameLayer::gameOver() {
 	for (auto pipe : this->pipes) {
 		this->removeChild(pipe);
 	}
+	if (this->bestScore < this->score) {
+		UserDefault::getInstance()->setIntegerForKey(KEY, this->score);
+		this->bestScore = this->score;
+	}
 	this->statusLayer->hideScore();
 	this->showScorePanel();
+	this->gameStatus = GAME_OVER;
 }
 
 void GameLayer::showScorePanel() {

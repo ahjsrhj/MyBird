@@ -6,14 +6,23 @@
 #include "BackgroundLayer.h"
 #include "SimpleAudioEngine.h"
 #include "StatusLayer.h"
+#include "WelcomeScene.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
+
+#define KEY "best_score"
 
 enum {
 	PIPE_PASS,
 	PIPE_NEW
 };
+
+typedef enum {
+	GAME_START,
+	GAME_RUNNING,
+	GAME_OVER
+} GameStatus;
 
 //小鸟刚体的掩码值
 const int BIRD_MASK = 1 << 0;
@@ -91,8 +100,12 @@ private:
 
 	int score;
 
+	int bestScore;
+
 	StatusLayer *statusLayer;
 
 	Size visibleSize;
+
+	GameStatus gameStatus;
 
 };
